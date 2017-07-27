@@ -1,9 +1,7 @@
 package com.romanov.domain;
 
-import org.jasypt.util.text.BasicTextEncryptor;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -77,10 +75,7 @@ public class User {
         this.dateofbirth = dateofbirth;
     }
 
-    public String getPassword() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        return encoder.encode(password);
-    }
+    //нет getter'а пароля для (наверное) большей безопасности
 
     public void setPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();

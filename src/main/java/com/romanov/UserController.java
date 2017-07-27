@@ -2,15 +2,12 @@ package com.romanov;
 
 import com.romanov.data.UserInfoRepository;
 import com.romanov.domain.User;
-import com.sun.org.apache.regexp.internal.RE;
-import javassist.NotFoundException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 
@@ -27,11 +24,12 @@ public class UserController {
                                      @RequestParam(value = "dob") String dateofbirth,
                                      @RequestParam(value = "pass") String password) {
         try {
-            User user = new User(email,
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            User user = new User(email,     // проверить повторение email'ов?
                     firstname,
                     secondname,
                     dateofbirth,
-                    password);
+                    encoder.encode(password));
             repository.save(user);
             return new ResponseEntity<>("User created! id = " + user.getId().toString(), HttpStatus.CREATED);
         } catch (Exception e) {
@@ -57,13 +55,13 @@ public class UserController {
 
     @RequestMapping(value = "/findbyEmail", method = RequestMethod.GET)
     public ResponseEntity<?> getByEmail(@RequestParam(value = "email") String email){
-        try {
+        try {       //преобразовать в JSON?
             List<User> user = repository.findByEmail(email);
             if (user.isEmpty()) {
                 return new ResponseEntity<>("No matching users found", HttpStatus.NOT_FOUND);
             }
             return new ResponseEntity<>("Users, that match the query: " + "\r\n" +
-                    new JSONObject(user.toString()), HttpStatus.FOUND);
+                    user.toString(), HttpStatus.FOUND);
         } catch (Exception e) {
             return new ResponseEntity<>("Error raised -> " + e.toString(), HttpStatus.BAD_REQUEST);
         }
