@@ -9,4 +9,14 @@
 Собранный .jar доступен здесь -> <h2>https://www.dropbox.com/s/7tk47pitxx6qwbv/gs-accessing-data-jpa-0.1.0.jar?dl=0</h2>
 (т.к. для GitHub'а он слишком большой(29 Мб))
 
+<p>Список команд:
+1) Добавить нового пользователя (POST):
+        /newuser?email=<email>&name=<name>&surname=<surname>&dob=<dateOfBirth&pass=<password>
+  (все поля required, возвращает id)
+2) Удалить пользователя (DELETE):
+        /deluser?id=<id>
+3) Поиск пользователя по email (GET):
+        /findbyEmail?email=<email>
+
+
 Для обращения к localhost'у был использован плагин Postman.
